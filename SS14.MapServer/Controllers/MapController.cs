@@ -209,6 +209,20 @@ public class MapController : ControllerBase
         return Ok();
     }
 
+    [HttpPost("syncall")]
+    [Consumes("application/json")]
+    public async Task<IActionResult> SyncAllMaps()
+    {
+        var data = new JobDataMap
+        {
+            {Jobs.SyncMaps.MapListKey, new List<string>() },
+            {Jobs.SyncMaps.SyncAllKey, true}
+        };
+
+        await _schedulingService.RunJob<Jobs.SyncMaps>(nameof(Jobs.SyncMaps), "Sync", data);
+        return Ok();
+    }
+
     private bool ValidateMapRequest(Map map, ICollection<IFormFile> images, [NotNullWhen(true)] out BadRequestObjectResult? error)
     {
         //Ensure map id is lowercase
