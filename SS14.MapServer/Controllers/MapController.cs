@@ -197,11 +197,16 @@ public class MapController : ControllerBase
 
     [HttpPost("sync")]
     [Consumes("application/json")]
-    public async Task<IActionResult> SyncMaps(List<string>? mapFileNames, bool syncAll)
+    public async Task<IActionResult> SyncMaps(string? mapFileNames, bool syncAll)
     {
+        // Split the string into a list of strings. They're seperated by commas.
+        if (mapFileNames == null)
+            mapFileNames = "";
+        var mapList = mapFileNames.Split(',').ToList();
+
         var data = new JobDataMap
         {
-            {Jobs.SyncMaps.MapListKey, mapFileNames ?? new List<string>() },
+            {Jobs.SyncMaps.MapListKey, mapList},
             {Jobs.SyncMaps.SyncAllKey, syncAll}
         };
 
