@@ -199,10 +199,7 @@ public class MapController : ControllerBase
     [Consumes("application/json")]
     public async Task<IActionResult> SyncMaps(string? mapFileNames, bool syncAll)
     {
-        // Split the string into a list of strings. They're seperated by commas.
-        if (mapFileNames == null)
-            mapFileNames = "";
-        var mapList = mapFileNames.Split(',').ToList();
+        var mapList = mapFileNames?.Split(',').ToImmutableList() ?? ImmutableList<string>.Empty;
 
         var data = new JobDataMap
         {
@@ -222,6 +219,32 @@ public class MapController : ControllerBase
         {
             {Jobs.SyncMaps.MapListKey, new List<string>() },
             {Jobs.SyncMaps.SyncAllKey, true}
+        };
+
+        await _schedulingService.RunJob<Jobs.SyncMaps>(nameof(Jobs.SyncMaps), "Sync", data);
+        return Ok();
+    }
+
+    [HttpPost("syncalldelta")]
+    [Consumes("application/json")]
+    public async Task<IActionResult> SyncAllDelta()
+    {
+        // Hardcoded go brr
+        var mapList = new List<string>
+        {
+            "arena.yml",
+            "asterisk.yml",
+            "edge.yml",
+            "hive.yml",
+            "pebble.yml",
+            "shoukou.yml",
+            "tortuga.yml"
+        };
+
+        var data = new JobDataMap
+        {
+            {Jobs.SyncMaps.MapListKey, mapList},
+            {Jobs.SyncMaps.SyncAllKey, false}
         };
 
         await _schedulingService.RunJob<Jobs.SyncMaps>(nameof(Jobs.SyncMaps), "Sync", data);
