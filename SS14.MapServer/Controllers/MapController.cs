@@ -235,9 +235,11 @@ public class MapController : ControllerBase
             "arena.yml",
             "asterisk.yml",
             "edge.yml",
+            "hammurabi.yml",
             "hive.yml",
             "pebble.yml",
             "shoukou.yml",
+            "submarine.yml",
             "tortuga.yml"
         };
 
