@@ -237,6 +237,7 @@ public class MapController : ControllerBase
             "edge.yml",
             "hammurabi.yml",
             "hive.yml",
+            "lighthouse.yml",
             "pebble.yml",
             "shoukou.yml",
             "submarine.yml",
